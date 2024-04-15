@@ -21,23 +21,26 @@ const LikedMoviesPage = () => {
   const [likedMovies, setLikedMovies] = useState<Movie[]>([]);
 
   const fetchLikedMovies = async () => {
-    const likedMovieIds = JSON.parse(
-      localStorage.getItem("likedMovies") || "[]"
-    );
-    console.log(likedMovieIds);
-    const movies = [];
-    for (const id of likedMovieIds) {
-      try {
-        const apiKey = "da17a8a1";
-        const response = await axios.get(
-          `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`
-        );
-        movies.push(response.data);
-      } catch (error) {
-        console.error("Failed to fetch movie:", error);
+    if (typeof window !== "undefined") {
+      const likedMovieIds = JSON.parse(
+        
+        sessionStorage.getItem("likedMovies") || "[]"
+      );
+      console.log(likedMovieIds);
+      const movies = [];
+      for (const id of likedMovieIds) {
+        try {
+          const apiKey = "da17a8a1";
+          const response = await axios.get(
+            `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`
+          );
+          movies.push(response.data);
+        } catch (error) {
+          console.error("Failed to fetch movie:", error);
+        }
       }
+      setLikedMovies(movies);
     }
-    setLikedMovies(movies);
   };
   useEffect(() => {
     fetchLikedMovies();
@@ -102,7 +105,7 @@ const LikedMoviesPage = () => {
                   className="flex items-center gap-1 bg-red-500 text-white"
                   onClick={() => {
                     unlikeMovie(movie.imdbID);
-                    window.location.reload(); // Call as a function with parentheses
+                    window.location.reload(); 
                   }}
                 >
                   Remove
